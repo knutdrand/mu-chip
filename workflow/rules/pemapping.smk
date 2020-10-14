@@ -70,9 +70,17 @@ rule bamtobedpe:
     input:
         "results/{species}/filtered_dedup_pe/{pesample}.bam",
     output:
-        "results/{species}/dedup_bed/{pesample}.bed",
+        "results/{species}/all_dedup_bed/{pesample}.bed",
     shell:
         "samtools collate -Ou {input} -| bedtools bamtobed -i - | chiptools pairbed | bedtools sort > {output}"
+
+rule remove_small_fragments:
+    input:
+        "results/{species}/all_dedup_bed/{pesample}.bed",
+    output:
+        "results/{species}/dedup_bed/{pesample}.bed",
+    shell:
+        "awk '{{if (($3-$2)>50) print}}' {input} > {output}"
 
 rule genomecov:
     input:
@@ -86,6 +94,8 @@ rule genomecov:
         "-bga"
     wrapper:
         "0.64.0/bio/bedtools/genomecov"
+
+
 
 rule download_chrom_sizes:
     output:
