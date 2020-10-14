@@ -1,0 +1,25 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+
+description: an entry in the sample sheet
+
+# columns that the config/samples.tsv file can have and which type they should be
+properties:
+  sample:
+    type: string
+    description: sample name/identifier
+  condition:
+    type: string
+    description: antibody used or "input"
+  celltype:
+    type: string
+    description: cell type of the sample
+  replicate:
+    description: indicator of which biological replicate
+  endedness:
+    description: pe or se
+
+
+# columns that the config/samples.tsv file must have to pass schema validation
+required:
+  - sample
+  - condition
