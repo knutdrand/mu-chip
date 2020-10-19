@@ -13,7 +13,6 @@ include: "rules/pemapping.smk"
 rule all:
     input:
         bedgraphs=expand("results/mm10/coverage/{sample}.bdg", sample=samples.index),
-        bedgraphs=expand("results/mm10/coverage/{sample}.bdg", sample=samples.index),
         multimapped=expand("results/mm10/multimapped_dedup_pe/{sample}.bam" % sample=samples.index)
         # plots=expand("{plottype}/{group}.png", group=samples["analysis_group"], plottype=["vplot", "averageplot"])
         # trackhub=expand("trackhub/{species}/trackDb.txt", species=samples["species"])
