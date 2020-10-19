@@ -59,7 +59,7 @@ rule get_multimapped_reads:
         "results/{species}/dedup_pe/{pesample}.bam"
     output:
         "results/{species}/multimapped_dedup_pe/{pesample}.bam",
-        temp("results/tmp.bam")
+        temp("results/{species}/multimapped_dedup_pe/temp/{pesample}.bam")
     params:
         extra="-Bb -q %s -f 1796 -F 2 " % config.get("mapq", "30")
     shell:
