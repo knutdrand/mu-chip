@@ -1,3 +1,22 @@
-sample	condition
-1-p12-AZ-200-B1_S1	AZ
-11-p10A-INP-21_S2	INPUT
+sample	celltype	condition	replicate	run
+1-p12-AZ-200-B1_S1	p12 oocytes	H2AZ	A	2
+11-p10A-INP-21_S2	p10 oocytes	Input	A	2
+10-cu-ac-1-3-10_S3	Cumulus/ovarian cells	H2AZac	A	2
+3-NSN-AZ-200-B3_S4	NSN oocytes	H2AZ	A	2
+3-p10A-m1-300-13_S5	p10 oocytes	H3K4me1	A	2
+9-cu-AZ-2-3-19_S6	Cumulus/ovarian cells	H2AZ	A	2
+5-MII-AZ-300-B5_S7	MII oocytes	H2AZ	A	2
+1-p10A-AZ-250-11_S8	p10 oocytes	H2AZ	A	2
+5-p10B-ac-150-15_S9	p10 oocytes	H2AZac	B	2
+4-p10B-AZ-250-14_S10	p10 oocytes	H2AZ	B	2
+12-p10B-INP-22_S11	p10 oocytes	Input	B	2
+13-p7-INP-25_S12	p7 oocytes	Input	A	2
+15-cu-INP-20_S13	Cumulus/ovarian cells	Input	A	2
+6-p7-Az-250-16_S14	p7 oocytes	H2AZ	A	2
+14-p12B-INP-27_S15	p12 oocytes	Input	B	2
+2-p10A-ac-150-12_S16	p10 oocytes	H2AZac	A	2
+6-MII-ac-80-B6_S17	MII oocytes	H2AZac	A	2
+8-p12B-ac-65-18_S18	p12 oocytes	H2AZac	B	2
+7-p7-ac-125-07_S19	p7 oocytes	H2AZac	A	2
+4-SN-AZ-200-B4_S20	SN oocytes	H2AZ	A	2
+2-p12-ac-100-B2_S21	p12 oocytes	H2AZac	A	2
