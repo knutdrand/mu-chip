@@ -61,9 +61,10 @@ rule get_multimapped_reads:
         "results/{species}/multimapped_dedup_pe/{pesample}.bam",
         temp("results/{species}/multimapped_dedup_pe/temp/{pesample}.bam")
     params:
-        extra="-Bb -q %s -f 1796 -F 2 " % config.get("mapq", "30")
+        first="-Bb -F 1796 -f 2 ",
+        second = "-q %s "% config.get("mapq", "30"),
     shell:
-        "samtools view {params.extra} {input} -U {output[0]} > {output[1]}"
+        "samtools view -Bbu {params.first} {input} | samtools view -U {output[0]} > {output[1]}"
 
 rule bamtobedpe:
     input:
