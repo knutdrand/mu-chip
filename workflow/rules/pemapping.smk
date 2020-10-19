@@ -66,6 +66,16 @@ rule filter_reads:
     wrapper:
         "0.50.4/bio/samtools/view"
 
+rule get_multimapped_reads:
+    input:
+        "results/{species}/dedup_pe/{pesample}.bam"
+    output:
+        "results/{species}/multimapped_dedup_pe/{pesample}.bam")
+    params:
+        "-Bb -q %s -f 1796 -F 2 -U" % config.get("mapq", "30")
+    wrapper:
+        "0.50.4/bio/samtools/view"
+
 rule bamtobedpe:
     input:
         "results/{species}/filtered_dedup_pe/{pesample}.bam",
