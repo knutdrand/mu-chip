@@ -58,13 +58,12 @@ rule get_multimapped_reads:
     input:
         "results/{species}/dedup_pe/{pesample}.bam"
     output:
-        "results/{species}/multimapped_dedup_pe/{pesample}.bam",
-        temp("results/{species}/multimapped_dedup_pe/temp/{pesample}.bam")
+        "results/{species}/multimapped_dedup_pe/{pesample}.bam"
     params:
-        first="-Bb -F 1796 -f 2 ",
-        second = "-q %s "% config.get("mapq", "30"),
+        first="-B -F 1796 -f 2 ",
+        mapq = "-q %s "% config.get("mapq", "30"),
     shell:
-        "samtools view -Bbu {params.first} {input} | samtools view -U {output[0]} > {output[1]}"
+        """samtools view {params.first} {input} | awk '{{if ($5<{params.mapq}) print}}' | gzip > {output}"""
 
 rule bamtobedpe:
     input:
