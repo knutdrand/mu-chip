@@ -44,18 +44,6 @@ rule remove_duplicates:
     wrapper:
         "0.64.0/bio/picard/markduplicates"
 
-# rule samtools_remove_duplicates_pe:
-#     input:
-#         "results/{species}/mapped_pe/{pesample}.bam"
-#     output:
-#         bam="results/{species}/dedup_pe/{pesample}.bam",
-#     log:
-#         "logs/dedup/{species}/{pesample}.log"
-#     threads:
-#         4
-#     shell:
-#         "samtools markdup -rs --threads {threads} {input} {output} 2> {log}"
-
 rule filter_reads:
     input:
         "results/{species}/dedup_pe/{pesample}.bam"
@@ -63,16 +51,6 @@ rule filter_reads:
         temp("results/{species}/filtered_dedup_pe/{pesample}.bam")
     params:
         "-Bb -q %s -F 1796 -f 2" % config.get("mapq", "30")
-    wrapper:
-        "0.50.4/bio/samtools/view"
-
-rule get_multimapped_reads:
-    input:
-        "results/{species}/dedup_pe/{pesample}.bam"
-    output:
-        "results/{species}/multimapped_dedup_pe/{pesample}.bam")
-    params:
-        "-Bb -q %s -f 1796 -F 2 -U" % config.get("mapq", "30")
     wrapper:
         "0.50.4/bio/samtools/view"
 
