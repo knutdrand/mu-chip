@@ -3,8 +3,8 @@ rule cutadapt_pe:
         "results/reads/{pesample}_R1_001.fastq.gz",
         "results/reads/{pesample}_R2_001.fastq.gz",
     output:
-        fastq1="results/trimmed/{pesample}_R1.fastq.gz",
-        fastq2="results/trimmed/{pesample}_R2.fastq.gz",
+        temp(fastq1="results/trimmed/{pesample}_R1.fastq.gz"),
+        temp(fastq2="results/trimmed/{pesample}_R2.fastq.gz"),
         qc="results/trimmed/{pesample}.qc.txt"
     params:
         adapters = '-a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -A AATGATACGGCGACCACCGAGATCTACAC',
@@ -19,7 +19,7 @@ rule bwa_mem_pe:
     input:
         reads=expand("results/trimmed/{{pesample}}_R{read}.fastq.gz", read=[1,2])
     output:
-        "results/{species}/mapped_pe/{pesample}.bam"
+        temp("results/{species}/mapped_pe/{pesample}.bam")
     log:
         "logs/bwa_mem/{species}/{pesample}.log"
     params:
@@ -35,7 +35,7 @@ rule remove_duplicates:
     input:
         "results/{species}/mapped_pe/{pesample}.bam"
     output:
-        bam="results/{species}/dedup_pe/{pesample}.bam",
+        bam=temp("results/{species}/dedup_pe/{pesample}.bam"),
         metrics="results/picard_dedup/{species}/{pesample}.metrics.txt"
     log:
         "logs/picard/picard_dedup/{species}/{pesample}.log"
@@ -60,7 +60,7 @@ rule filter_reads:
     input:
         "results/{species}/dedup_pe/{pesample}.bam"
     output:
-        "results/{species}/filtered_dedup_pe/{pesample}.bam"
+        temp("results/{species}/filtered_dedup_pe/{pesample}.bam")
     params:
         "-Bb -q %s -F 1796 -f 2" % config.get("mapq", "30")
     wrapper:
@@ -70,7 +70,7 @@ rule bamtobedpe:
     input:
         "results/{species}/filtered_dedup_pe/{pesample}.bam",
     output:
-        "results/{species}/all_dedup_bed/{pesample}.bed",
+        temp("results/{species}/all_dedup_bed/{pesample}.bed"),
     shell:
         "samtools collate -Ou {input} -| bedtools bamtobed -i - | chiptools pairbed | bedtools sort > {output}"
 
@@ -94,8 +94,6 @@ rule genomecov:
         "-bga"
     wrapper:
         "0.64.0/bio/bedtools/genomecov"
-
-
 
 rule download_chrom_sizes:
     output:
