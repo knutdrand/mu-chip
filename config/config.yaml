@@ -3,4 +3,4 @@
 # one row per sample. It can be parsed easily via pandas.
 samples: "config/samples.tsv"
 endedness: "pe"
-data_dir: "/home/knut/Data/"
+data_dir: "/knut/Data/"
