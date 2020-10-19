@@ -12,7 +12,7 @@ include: "rules/pemapping.smk"
 
 rule all:
     input:
-        bedgraphs=expand("results/mm10/coverage/{sample}.bdg", sample=samples.index)
-        multimapped=expand("results/mm10/multimapped_dedup_pe/{sample}.bam" % sample=samples.index)
+        bedgraphs=expand("results/mm10/coverage/{sample}.bdg", sample=samples.index),
+        multimap=expand("results/mm10/multimapped_dedup_pe/{sample}.bam", sample=samples.index)
 
 include: "rules/other.smk"
