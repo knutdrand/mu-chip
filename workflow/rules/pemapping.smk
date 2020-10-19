@@ -60,7 +60,7 @@ rule bamtobedpe:
     output:
         temp("results/{species}/all_dedup_bed/{pesample}.bed"),
     shell:
-        "samtools collate -Ou {input} -| bedtools bamtobed -i - | chiptools pairbed | bedtools sort > {output}"
+        "samtools collate -Ou {input} | bedtools bamtobed -i - | chiptools pairbed | bedtools sort > {output}"
 
 rule remove_small_fragments:
     input:
