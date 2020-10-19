@@ -109,3 +109,9 @@ rule clean_chrom_sizes:
         "results/{species}/data/chrom.sizes.txt"
     shell:
         "zcat {input} > {output}"
+
+rule copy_data:
+    output:
+        "results/reads/{filename}.fastq.gz"
+    shell:
+        """scp -i ../../u1452@nelstor0.cbu.uib.no.key u1452@nelstor0.cbu.uib.no:/elixir-chr/nels/users/u1452/Projects/UiO_Dahl_Chromatin_2018/MadeleineFosslie_MF/200806_A00943.B.Project_Fosslie-libs14-2020-07-29/*/{wildcards.filename}.fastq.gz results/reads/"""
