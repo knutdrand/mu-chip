@@ -58,7 +58,7 @@ rule get_multimapped_reads:
     input:
         "results/{species}/dedup_pe/{pesample}.bam"
     output:
-        "results/{species}/multimapped_dedup_pe/{pesample}.bam"
+        "results/{species}/multimapped_dedup_pe/{pesample}.sam.gz"
     params:
         first="-B -F 1796 -f 2 ",
         mapq = "-q %s "% config.get("mapq", "30"),
