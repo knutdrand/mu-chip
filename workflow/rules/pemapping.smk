@@ -113,5 +113,7 @@ rule clean_chrom_sizes:
 rule copy_data:
     output:
         temp("results/reads/{filename}.fastq.gz")
+    resources:
+        download=1
     shell:
         """scp -i ../../u1452@nelstor0.cbu.uib.no.key u1452@nelstor0.cbu.uib.no:/elixir-chr/nels/users/u1452/Projects/UiO_Dahl_Chromatin_2018/MadeleineFosslie_MF/*/*/{wildcards.filename}.fastq.gz results/reads/"""
