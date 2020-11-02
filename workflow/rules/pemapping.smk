@@ -3,8 +3,8 @@ rule cutadapt_pe:
         "results/reads/{pesample}_R1_001.fastq.gz",
         "results/reads/{pesample}_R2_001.fastq.gz",
     output:
-        temp(fastq1="results/trimmed/{pesample}_R1.fastq.gz"),
-        temp(fastq2="results/trimmed/{pesample}_R2.fastq.gz"),
+        fastq1=temp("results/trimmed/{pesample}_R1.fastq.gz"),
+        fastq2=temp("results/trimmed/{pesample}_R2.fastq.gz"),
         qc="results/trimmed/{pesample}.qc.txt"
     params:
         adapters = '-a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -A AATGATACGGCGACCACCGAGATCTACAC',
@@ -31,7 +31,7 @@ rule bwa_mem_pe:
     wrapper:
         "0.49.0/bio/bwa/mem"
 
-rule remove_duplicates:
+rule remove_duplicates_pe:
     input:
         "results/{species}/mapped_pe/{pesample}.bam"
     output:

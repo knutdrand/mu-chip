@@ -1,21 +1,21 @@
 rule cutadapt_se:
     input:
-        "results/reads/{sesample}.fastq.gz"
+        "results/reads/{sesample}_R1_001.fastq.gz"
     output:
         fastq="results/trimmed/{sesample}.fastq.gz",
         qc="results/trimmed/{sesample}.qc.txt"
     params:
-        adapters='-a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -a AATGATACGGCGACCACCGAGATCTACAC'
+        adapters='-a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -a AATGATACGGCGACCACCGAGATCTACAC',
         others='--nextseq-trim=20 -m 10'
     log:
-        "logs/cutadapt/{sample}.log"
+        "logs/cutadapt/{sesample}.log"
     threads: 16
     script:
         "0.66.0/bio/cutadapt/se"
 
 rule bwa_mem_se:
     input:
-        reads="trimmed/{sample}.fastq.gz"
+        reads="results/trimmed/{sample}.fastq.gz"
     output:
         "results/{species}/mapped/{sample}.bam"
     log:
@@ -52,11 +52,19 @@ rule remove_duplicates:
 
 rule bamtobedpe2se:
     input:
-        "{species}/dedup/{sesample}.bam",
+        "results/{species}/dedup/{sesample}.bam",
     output:
-        "{species}/dedup_bed/{sesample}.bed.gz",
+        "results/{species}/dedup_bed/{sesample}.bed.gz",
     shell:
         "samtools view -b -f 64 {input} | bedtools bamtobed -i - | gzip > {output}"
+
+rule merge_reads:
+    input:
+        lambda w: expand_se_combo("results/{species}/dedup_bed/{sesample}.bed.gz", w)
+    output:
+        "results/{species}/merged/{celltype}_{condition}.bed.gz",
+    shell:
+        "zcat {input} | gzip | bedsort > {output}"
 
 rule genomecov_se:
     input:

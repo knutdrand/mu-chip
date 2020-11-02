@@ -1,3 +1,3 @@
-sample	condition
-testing_1	H3K4me3
-testing_2	INPUT
+sample	celltype	condition	replicate	run
+testing_1	blood	H3K4me3	1	1
+testing_2	blood	INPUT	1	1

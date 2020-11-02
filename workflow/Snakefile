@@ -11,10 +11,13 @@ include: "rules/common.smk"
 include: "rules/pemapping.smk"
 include: "rules/semapping.smk"
 include: "rules/peakcalling.smk"
+include: "rules/plots.smk"
 
+species = config.get("species", "hg38")
 rule all:
     input:
-        bedgraphs=expand("results/mm10/coverage/{sample}.bdg", sample=samples.index),
-        multimap=expand("results/mm10/multimapped_dedup_pe/{sample}.sam.gz", sample=samples.index)
+        heatmaps=expand("results/plots/%s/joined/all_{plottype}.png" % config.get("species", "hg38"), plottype=("average", "heat", "tss")),
+        domains=expand(f"results/{species}/domains/{{combo}}.bed", combo=[c for c in combos if not c.lower().endswith("input")]),
+        # multimap=expand("results/mm10/multimapped_dedup_pe/{sample}.sam.gz", sample=samples.index)
 
 include: "rules/other.smk"
