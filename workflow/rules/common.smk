@@ -13,7 +13,10 @@ validate(config, schema="../schemas/config.schema.yaml")
 samples = pd.read_csv(config["samples"], sep="\t").set_index("sample", drop=False)
 validate(samples, schema="../schemas/samples.schema.yaml")
 if "endedness" not in samples:
-    samples["endedness"] = config["endedness"]
+    samples["endedness"] = config.get("endedness", "se")
+
+combos = {f"{celltype}_{condition}" for celltype, condition in zip(samples["celltype"], samples["condition"])}
 
 wildcard_constraints:
-    pesamples="|".join(samples.index[samples["endedness"]=="pe"])
+    pesample="|".join(samples.index[samples["endedness"]=="pe"])
+    sesample="|".join(samples.index[samples["endedness"]=="se"])

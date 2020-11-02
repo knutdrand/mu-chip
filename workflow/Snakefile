@@ -9,15 +9,12 @@ singularity: "docker://continuumio/miniconda3"
 
 include: "rules/common.smk"
 include: "rules/pemapping.smk"
+include: "rules/semapping.smk"
+include: "rules/peakcalling.smk"
 
 rule all:
     input:
-        bedgraphs=expand("results/mm10/coverage/{sample}.bdg", sample=samples.index)
-        # plots=expand("{plottype}/{group}.png", group=samples["analysis_group"], plottype=["vplot", "averageplot"])
-        # trackhub=expand("trackhub/{species}/trackDb.txt", species=samples["species"])
-        # "mapping_stats.csv"
-        # The first rule should define the default target files
-        # Subsequent target rules can be specified below. They should start with all_*.
-
+        bedgraphs=expand("results/mm10/coverage/{sample}.bdg", sample=samples.index),
+        multimap=expand("results/mm10/multimapped_dedup_pe/{sample}.sam.gz", sample=samples.index)
 
 include: "rules/other.smk"
