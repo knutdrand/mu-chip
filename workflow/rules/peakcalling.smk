@@ -6,7 +6,8 @@ rule call_broad_peak:
         control="results/{species}/merged/{celltype}_input.bed.gz"
     output:
         "results/{species}/broadpeakcalling/{celltype}_{condition}_peaks.broadPeak",
-        "results/{species}/broadpeakcalling/{celltype}_{condition}_treat_pileup.bdg"
+        "results/{species}/broadpeakcalling/{celltype}_{condition}_treat_pileup.bdg",
+        "results/{species}/broadpeakcalling/{celltype}_{condition}_control_lambda.bdg"
     conda:
         "envs/oldmacs.yaml"
     params:
@@ -22,6 +23,7 @@ rule move_coverage:
         "results/{species}/coverage/{combo}.bdg"
     shell:
         "cp {input} {output}"
+
 rule merge_domains:
     input:
         "results/{species}/broadpeakcalling/{name}_peaks.broadPeak"

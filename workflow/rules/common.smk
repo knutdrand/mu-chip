@@ -27,10 +27,8 @@ combos = {f"{celltype}_{condition}" for celltype, condition in zip(samples["cell
 def get_combos(comparisongroup):
     return {f"{celltype}_{condition}" for celltype, condition, g in zip(samples["celltype"], samples["condition"], samples["comparisongroup"]) if g == comparisongroup and condition.lower() != "input"}
 
-wildcard_constraints:
-    pesample="|".join(samples.index[samples["endedness"]=="pe"]),
-    sesample="|".join(samples.index[samples["endedness"]=="se"]),
-    combo="|".join(combos)
+def get_combos_for_species(species):
+    return {f"{celltype}_{condition}" for celltype, condition, s in zip(samples["celltype"], samples["condition"], samples["species"]) if s == species and condition.lower() != "input"}
 
 def expand_se_combo(format_string, wildcards):
     mask = (samples["endedness"]=="se")
@@ -45,3 +43,11 @@ def expand_all_combos(format_string, wildcards):
     mask &= (samples["condition"].str.lower()==wildcards.condition.lower())
     combos = list(samples.index[mask])
     return expand(format_string, species=wildcards.species, sesample=combos)
+
+
+
+wildcard_constraints:
+    pesample="|".join(samples.index[samples["endedness"]=="pe"]),
+    sesample="|".join(samples.index[samples["endedness"]=="se"]),
+    combo="|".join(combos),
+    species="|".join(set(samples["species"]))

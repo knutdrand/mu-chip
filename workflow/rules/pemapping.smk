@@ -83,16 +83,3 @@ rule genomecov:
     wrapper:
         "0.64.0/bio/bedtools/genomecov"
 
-rule download_chrom_sizes:
-    output:
-        "results/{species}/data/chromInfo.txt.gz"
-    shell:
-        "wget https://hgdownload.soe.ucsc.edu/goldenPath/{wildcards.species}/database/chromInfo.txt.gz -O {output}"
-
-rule clean_chrom_sizes:
-    input:
-        "results/{species}/data/chromInfo.txt.gz"
-    output:
-        "results/{species}/data/chrom.sizes.txt"
-    shell:
-        "zcat {input} > {output}"

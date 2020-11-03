@@ -1,4 +1,4 @@
-rule cutadapt_se:
+rule cutadapt:
     input:
         "results/reads/{sesample}_R1_001.fastq.gz"
     output:
@@ -13,7 +13,7 @@ rule cutadapt_se:
     script:
         "0.66.0/bio/cutadapt/se"
 
-rule bwa_mem_se:
+rule bwa_mem:
     input:
         reads="results/trimmed/{sample}.fastq.gz"
     output:
@@ -27,7 +27,7 @@ rule bwa_mem_se:
     wrapper:
         "0.49.0/bio/bwa/mem"
 
-rule filter_se:
+rule filter:
     input:
         "{folder}mapped/{sample}.bam"
     output:
@@ -50,7 +50,7 @@ rule remove_duplicates:
     wrapper:
         "0.64.0/bio/picard/markduplicates"
 
-rule bamtobedpe2se:
+rule bamtobed:
     input:
         "results/{species}/dedup/{sesample}.bam",
     output:
@@ -65,16 +65,3 @@ rule merge_reads:
         "results/{species}/merged/{celltype}_{condition}.bed.gz",
     shell:
         "zcat {input} | gzip | bedsort > {output}"
-
-rule genomecov_se:
-    input:
-        bed="results/{species}/dedup_bed/{sesample}.bed.gz",
-        ref="results/{species}/data/chrom.sizes.txt"
-    output:
-        "results/{species}/coverage/{sesample}.bdg"
-    log:
-        "logs/coverage/{species}/{sesample}.log"
-    params: 
-        "-bga"
-    wrapper:
-        "0.64.0/bio/bedtools/genomecov"

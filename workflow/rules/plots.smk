@@ -5,7 +5,7 @@ wildcard_constraints:
 
 rule heatplot:
     input:
-        bedgraph="results/{species}/coverage/{combo}.bdg",
+        bedgraph="results/{species}/broadpeakcalling/{combo}_treat_pileup.bdg",
         regions="results/{species}/domains/{combo}.bed"
     output:
         "results/plots/{species}/{combo}_heat.png",
@@ -15,8 +15,8 @@ rule heatplot:
 
 rule tssplot:
     input:
-        bedgraph="results/{species}/coverage/{combo}.bdg",
-        regions="results/{species}/data/genes.bed"
+        bedgraph="results/{species}/broadpeakcalling/{combo}_treat_pileup.bdg",
+        regions="results/{species}/data/unique_tss.bed"
     output:
         "results/plots/{species}/{combo}_tss.png",
         "results/plots/{species}/{combo}_tss.pkl"
@@ -25,7 +25,7 @@ rule tssplot:
 
 rule averageplot:
     input:
-        bedgraph="results/{species}/coverage/{combo}.bdg",
+        bedgraph="results/{species}/broadpeakcalling/{combo}_treat_pileup.bdg",
         regions="results/{species}/domains/{combo}.bed"
     output:
         "results/plots/{species}/{combo}_average.png",
