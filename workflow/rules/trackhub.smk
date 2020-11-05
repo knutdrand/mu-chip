@@ -12,28 +12,30 @@ rule create_trackhub:
 
 rule clip_bed:
     input:
-        bdg="results/{species}/{folder}/{combo}{filetype}",
+        bdg="results/{species}/{folder}/{combo}{filetype}.{suffix}",
         sizes="results/{species}/data/chrom.sizes.txt"
     output:
-        temp("results/{species}/{folder}/{combo}{filetype}.clip")
+        temp("results/{species}/{folder}/{combo}{filetype}.{suffix}.clip")
     wildcard_constraints:
-        filetype=".*[bed|bdg|narrowPeak|broadPeak]"
+        filetype=".*",
+        suffix="bed|bdg|narrowPeak|broadPeak"
+
     shell:
         "bedtools slop -i {input.bdg} -g {input.sizes} -b 0 | bedClip stdin {input.sizes} > {output}"
 
 rule ucsc_sort:
     input:
-        "results/{species}/broadpeakcalling/{combo}{filetype}.clip"
+        "results/{species}/broadpeakcalling/{combo}{filetype}.bdg.clip"
     output:
-        "results/{species}/broadpeakcalling/{combo}{filetype}.clip.uscssort"
+        "results/{species}/broadpeakcalling/{combo}{filetype}.bdg.clip.uscssort"
     wildcard_constraints:
-        filetype=".*[bed|bdg|narrowPeak|broadPeak]"
+        filetype=".*"
     shell:
         "LC_COLLATE=C sort -k1,1 -k2,2n {input} -T results/tmp/ > {output}"
 
 rule create_bw_track:
     input:
-        bedGraph="results/{species}/broadpeakcalling/{combo}{filetype}.clip.uscssort",
+        bedGraph="results/{species}/broadpeakcalling/{combo}{filetype}.bdg.clip.uscssort",
         chromsizes="results/{species}/data/chrom.sizes.txt"
     output:
         "results/trackhub/{species}/{combo}{filetype}.bw"
