@@ -44,6 +44,8 @@ rule create_peak_track:
         sizes="results/{species}/data/chrom.sizes.txt"
     output:
         "results/trackhub/{species}/{combo}_peaks.bb"
+    conda:
+        "../envs/ucsc.yaml"
     shell:
         "bedToBigBed -type=bed6+3 {input.peaks} {input.sizes} {output}"
 
@@ -53,5 +55,7 @@ rule create_domain_track:
         sizes="results/{species}/data/chrom.sizes.txt"
     output:
         "results/trackhub/{species}/{combo}_domains.bb"
+    conda:
+        "../envs/ucsc.yaml"
     shell:
         "bedToBigBed {input.domains} {input.sizes} {output}"

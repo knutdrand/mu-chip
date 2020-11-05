@@ -55,6 +55,8 @@ rule bamtobed:
         "results/{species}/dedup/{sample}.bam",
     output:
         "results/{species}/dedup_bed/{sample}.bed.gz",
+    conda:
+        "../envs/bamtobed.yaml"
     shell:
         "samtools view -b -f 64 {input} | bedtools bamtobed -i - | gzip > {output}"
 
@@ -63,5 +65,7 @@ rule merge_reads:
         lambda w: expand_se_combo("results/{species}/dedup_bed/{sample}.bed.gz", w)
     output:
         "results/{species}/merged/{celltype}_{condition}.bed.gz",
+    conda:
+        "../envs/bedtools.yaml"
     shell:
         "zcat {input} | gzip | bedsort > {output}"

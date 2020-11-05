@@ -1,0 +1,5 @@
+channels:
+ - bioconda
+ dependencies:
+ - samtools=1.10
+ - bedtools=2.29.2

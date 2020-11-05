@@ -9,26 +9,19 @@ rule macs2:
         "results/{species}/broadpeakcalling/{celltype}_{condition}_treat_pileup.bdg",
         "results/{species}/broadpeakcalling/{celltype}_{condition}_control_lambda.bdg"
     conda:
-        "envs/oldmacs.yaml"
+        "../envs/oldmacs.yaml"
     params:
         gs=lambda w: genome_sizes[w.species]
     shell:
         "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition}"
-
-
-rule move_coverage:
-    input:
-        "results/{species}/broadpeakcalling/{combo}_treat_pileup.bdg"
-    output:
-        "results/{species}/coverage/{combo}.bdg"
-    shell:
-        "cp {input} {output}"
 
 rule merge_domains:
     input:
         "results/{species}/broadpeakcalling/{combo}_peaks.broadPeak"
     output:
         "results/{species}/domains/{combo}.bed"
+    conda:
+        "../envs/bedtools.yaml"
     shell:
         "bedtools merge -d 5000 -i {input} > {output}"
 
@@ -41,6 +34,7 @@ rule clip_bed:
     wildcard_constraints:
         filetype=".*",
         suffix="bed|bdg|narrowPeak|broadPeak"
-
+    conda:
+        "../envs/clipbed.yaml",
     shell:
         "%s {input.bdg} | bedtools slop -i - -g {input.sizes} -b 0 | bedClip stdin {input.sizes} {output}" % chromosome_grep
