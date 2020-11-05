@@ -43,4 +43,4 @@ rule clip_bed:
         suffix="bed|bdg|narrowPeak|broadPeak"
 
     shell:
-        "bedtools slop -i {input.bdg} -g {input.sizes} -b 0 | bedClip stdin {input.sizes} > {output}"
+        "bedtools slop -i {input.bdg} -g {input.sizes} -b 0 | bedClip stdin {input.sizes} {output}"
