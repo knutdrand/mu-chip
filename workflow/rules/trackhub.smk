@@ -8,7 +8,7 @@ rule create_trackhub:
     output:
         "results/trackhub/{species}/trackDb.txt"
     script:
-        "scripts/trackhub.py"
+        "../scripts/trackhub.py"
 
 rule ucsc_sort:
     input:

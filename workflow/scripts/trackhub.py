@@ -60,4 +60,4 @@ hub, genomes_file, genome, trackdb = trackhub.default_hub(
     genome="hg38",
     email="knutdrand@gmail.com")
 trackdb.add_tracks([histone_track(*pair) for pair in zip(names, colors)])
-open(snakemake.output[0], "w").write(trackdb)
+open(snakemake.output[0], "w").write(str(trackdb))
