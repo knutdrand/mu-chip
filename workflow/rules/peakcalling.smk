@@ -13,7 +13,7 @@ rule macs2:
     params:
         gs=lambda w: genome_sizes[w.species]
     shell:
-        "macs2 -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition}"
+        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition}"
 
 
 rule move_coverage:
