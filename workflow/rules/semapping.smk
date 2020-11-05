@@ -1,14 +1,14 @@
 rule cutadapt:
     input:
-        "results/reads/{sesample}_R1_001.fastq.gz"
+        "results/reads/{sample}_R1_001.fastq.gz"
     output:
-        fastq="results/trimmed/{sesample}.fastq.gz",
-        qc="results/trimmed/{sesample}.qc.txt"
+        fastq="results/trimmed/{sample}.fastq.gz",
+        qc="results/trimmed/{sample}.qc.txt"
     params:
         adapters='-a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -a AATGATACGGCGACCACCGAGATCTACAC',
         others='--nextseq-trim=20 -m 10'
     log:
-        "logs/cutadapt/{sesample}.log"
+        "logs/cutadapt/{sample}.log"
     threads: 16
     script:
         "0.66.0/bio/cutadapt/se"
@@ -29,9 +29,9 @@ rule bwa_mem:
 
 rule filter:
     input:
-        "{folder}mapped/{sample}.bam"
+        "results/{species}/mapped/{sample}.bam"
     output:
-        "{folder}mapped_filtered/{sample}.bam"
+        "results/{species}/mapped_filtered/{sample}.bam"
     params:
         "-Bb -q 30" 
     wrapper:
@@ -39,12 +39,12 @@ rule filter:
 
 rule remove_duplicates:
     input:
-        "results/{species}/mapped_filtered/{sesample}.bam"
+        "results/{species}/mapped_filtered/{sample}.bam"
     output:
-        bam=temp("results/{species}/dedup/{sesample}.bam"),
-        metrics="results/picard_dedup/{species}/{sesample}.metrics.txt"
+        bam=temp("results/{species}/dedup/{sample}.bam"),
+        metrics="results/picard_dedup/{species}/{sample}.metrics.txt"
     log:
-        "logs/picard/picard_dedup/{species}/{sesample}.log"
+        "logs/picard/picard_dedup/{species}/{sample}.log"
     params:
         "REMOVE_DUPLICATES=true ASSUME_SORTED=true VALIDATION_STRINGENCY=LENIENT"
     wrapper:
@@ -52,15 +52,15 @@ rule remove_duplicates:
 
 rule bamtobed:
     input:
-        "results/{species}/dedup/{sesample}.bam",
+        "results/{species}/dedup/{sample}.bam",
     output:
-        "results/{species}/dedup_bed/{sesample}.bed.gz",
+        "results/{species}/dedup_bed/{sample}.bed.gz",
     shell:
         "samtools view -b -f 64 {input} | bedtools bamtobed -i - | gzip > {output}"
 
 rule merge_reads:
     input:
-        lambda w: expand_se_combo("results/{species}/dedup_bed/{sesample}.bed.gz", w)
+        lambda w: expand_se_combo("results/{species}/dedup_bed/{sample}.bed.gz", w)
     output:
         "results/{species}/merged/{celltype}_{condition}.bed.gz",
     shell:

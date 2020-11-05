@@ -16,7 +16,7 @@ if "endedness" not in samples:
     samples["endedness"] = config.get("endedness", "se")
 
 if "species" not in samples:
-    samples["species"] = config.get("species", "hg38")
+    samples["species"] = config.get("species", "mm10")
 
 if "comparisongroup" not in samples:
     samples["comparisongroup"] = "all"
@@ -35,19 +35,17 @@ def expand_se_combo(format_string, wildcards):
     mask &= (samples["celltype"].str.lower()==wildcards.celltype.lower()) 
     mask &= (samples["condition"].str.lower()==wildcards.condition.lower())
     combos = list(samples.index[mask])
-    return expand(format_string, species=wildcards.species, sesample=combos)
+    return expand(format_string, species=wildcards.species, sample=combos)
 
 def expand_all_combos(format_string, wildcards):
     mask = (samples["endedness"]=="se")
     mask &= (samples["celltype"].str.lower()==wildcards.celltype.lower()) 
     mask &= (samples["condition"].str.lower()==wildcards.condition.lower())
     combos = list(samples.index[mask])
-    return expand(format_string, species=wildcards.species, sesample=combos)
-
-
+    return expand(format_string, species=wildcards.species, sample=combos)
 
 wildcard_constraints:
     pesample="|".join(samples.index[samples["endedness"]=="pe"]),
-    sesample="|".join(samples.index[samples["endedness"]=="se"]),
+    sample="|".join(samples.index[samples["endedness"]=="se"]),
     combo="|".join(combos),
     species="|".join(set(samples["species"]))

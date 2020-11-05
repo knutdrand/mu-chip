@@ -1,6 +1,6 @@
 genome_sizes = {"mm10": "mm", "hg38": "hs"}
 
-rule call_broad_peak:
+rule macs2:
     input:
         treatment="results/{species}/merged/{celltype}_{condition}.bed.gz",
         control="results/{species}/merged/{celltype}_input.bed.gz"
@@ -26,8 +26,8 @@ rule move_coverage:
 
 rule merge_domains:
     input:
-        "results/{species}/broadpeakcalling/{name}_peaks.broadPeak"
+        "results/{species}/broadpeakcalling/{combo}_peaks.broadPeak"
     output:
-        "results/{species}/domains/{name}.bed"
+        "results/{species}/domains/{combo}.bed"
     shell:
         "bedtools merge -d 5000 -i {input} > {output}"

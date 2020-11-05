@@ -14,10 +14,10 @@ include: "rules/peakcalling.smk"
 include: "rules/plots.smk"
 include: "rules/trackhub.smk"
 
-species = config.get("species", "hg38")
+species = config.get("species", "mm10")
 rule all:
     input:
-        heatmaps=expand("results/plots/%s/joined/all_{plottype}.png" % config.get("species", "hg38"), plottype=("average", "heat", "tss")),
+        heatmaps=expand("results/plots/%s/joined/all_{plottype}.png" % species, plottype=("average", "heat", "tss")),
         trackhub=f"results/trackhub/{species}/trackDb.txt",
         domains=expand(f"results/{species}/domains/{{combo}}.bed", combo=[c for c in combos if not c.lower().endswith("input")]),
 
