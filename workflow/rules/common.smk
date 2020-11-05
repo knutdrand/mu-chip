@@ -9,7 +9,7 @@ singularity: "docker://continuumio/miniconda3"
 
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
-
+chromosome_grep = "grep -Ew -e 'chr[0-9]{{1,2}}' -e chrX -e chrY"
 samples = pd.read_table(config["samples"], sep="\t").set_index("sample", drop=False)
 validate(samples, schema="../schemas/samples.schema.yaml")
 if "endedness" not in samples:
