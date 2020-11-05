@@ -10,24 +10,11 @@ rule create_trackhub:
     script:
         "scripts/trackhub.py"
 
-rule clip_bed:
-    input:
-        bdg="results/{species}/{folder}/{combo}{filetype}.{suffix}",
-        sizes="results/{species}/data/chrom.sizes.txt"
-    output:
-        temp("results/{species}/{folder}/{combo}{filetype}.{suffix}.clip")
-    wildcard_constraints:
-        filetype=".*",
-        suffix="bed|bdg|narrowPeak|broadPeak"
-
-    shell:
-        "bedtools slop -i {input.bdg} -g {input.sizes} -b 0 | bedClip stdin {input.sizes} > {output}"
-
 rule ucsc_sort:
     input:
-        "results/{species}/broadpeakcalling/{combo}{filetype}.bdg.clip"
+        "results/{species}/broadpeakcalling/{combo}{filetype}.clipped.bdg"
     output:
-        "results/{species}/broadpeakcalling/{combo}{filetype}.bdg.clip.uscssort"
+        "results/{species}/broadpeakcalling/{combo}{filetype}.clipped.bdg.uscssort"
     wildcard_constraints:
         filetype=".*"
     shell:
@@ -35,7 +22,7 @@ rule ucsc_sort:
 
 rule create_bw_track:
     input:
-        bedGraph="results/{species}/broadpeakcalling/{combo}{filetype}.bdg.clip.uscssort",
+        bedGraph="results/{species}/broadpeakcalling/{combo}{filetype}.clipped.bdg.uscssort",
         chromsizes="results/{species}/data/chrom.sizes.txt"
     output:
         "results/trackhub/{species}/{combo}{filetype}.bw"
@@ -44,15 +31,15 @@ rule create_bw_track:
 
 rule trunctate_score:
     input:
-        "results/{species}/broadpeakcalling/{combo}_{filetype}.broadPeak.clip"
+        "results/{species}/broadpeakcalling/{combo}_{filetype}.clipped.broadPeak"
     output:
-        temp("results/{species}/broadpeakcalling/{combo}_{filetype}.broadPeak.clip.trunc")
+        temp("results/{species}/broadpeakcalling/{combo}_{filetype}.clipped.broadPeak.trunc")
     shell:
         """awk  '{{OFS="\t"}}{{$5=($5>1000?1000:$5);print}} {{input}} > {{output}}'"""
 
 rule create_peak_track:
     input:
-        peaks="results/{species}/broadpeakcalling/{combo}_peaks.broadPeak.clip.trunc",
+        peaks="results/{species}/broadpeakcalling/{combo}_peaks.clipped.broadPeak.trunc",
         sizes="results/{species}/data/chrom.sizes.txt"
     output:
         "results/trackhub/{species}/{combo}_peaks.bb"
@@ -61,7 +48,7 @@ rule create_peak_track:
 
 rule create_domain_track:
     input:
-        domains="results/{species}/domains/{combo}.bed.clip",
+        domains="results/{species}/domains/{combo}.clipped.bed",
         sizes="results/{species}/data/chrom.sizes.txt"
     output:
         "results/trackhub/{species}/{combo}_domains.bb"

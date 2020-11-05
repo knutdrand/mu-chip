@@ -31,3 +31,16 @@ rule merge_domains:
         "results/{species}/domains/{combo}.bed"
     shell:
         "bedtools merge -d 5000 -i {input} > {output}"
+
+rule clip_bed:
+    input:
+        bdg="results/{species}/{folder}/{combo}{filetype}.{suffix}",
+        sizes="results/{species}/data/chrom.sizes.txt"
+    output:
+        "results/{species}/{folder}/{combo}{filetype}.clipped.{suffix}"
+    wildcard_constraints:
+        filetype=".*",
+        suffix="bed|bdg|narrowPeak|broadPeak"
+
+    shell:
+        "bedtools slop -i {input.bdg} -g {input.sizes} -b 0 | bedClip stdin {input.sizes} > {output}"
