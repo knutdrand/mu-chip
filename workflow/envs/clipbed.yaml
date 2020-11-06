@@ -1,5 +1,5 @@
 channels:
- - bioconda
- dependencies:
- - ucsc-bedclip
- - bedtools=2.29.2
+  - bioconda
+dependencies:
+  - ucsc-bedclip
+  - bedtools=2.29.2
