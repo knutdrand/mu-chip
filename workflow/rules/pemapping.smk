@@ -54,6 +54,14 @@ rule filter_reads:
     wrapper:
         "0.50.4/bio/samtools/view"
 
+rule remove_small_fragments_bam:
+    input:
+        "results/{species}/filtered_dedup_pe/{pesample}.bam"
+    output:
+        "results/{species}/size_filtered_dedup_pe/{pesample}.bam"        
+    shell:
+        """samtools view -h {input} | awk 'length($10) > 50 || $1 ~ /^@/' | samtools view -bS - > {output}"""
+
 rule bamtobedpe:
     input:
         "results/{species}/filtered_dedup_pe/{pesample}.bam",

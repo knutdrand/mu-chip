@@ -2,9 +2,7 @@ track_types = ["domains.bb", "treat_pileup.bw", "control_lambda.bw"]
 
 rule create_trackhub:
     input:
-        lambda wildcards: expand("results/trackhub/{{species}}/{combo}_{filetype}",
-                                 combo=get_combos_for_species(wildcards.species),
-                                 filetype=track_types)
+        lambda w: [fstr % tt for tt in track_types for fstr in expand_species("results/trackhub/{{species}}/{endedness}_{celltype}_{condition}_%s", species=w.species)]
     output:
         "results/trackhub/{species}/trackDb.txt"
     script:
@@ -12,10 +10,10 @@ rule create_trackhub:
 
 rule ucsc_sort:
     input:
-        "results/{species}/broadpeakcalling/{combo}{filetype}.clipped.bdg"
+        "results/{species}/{endedness}_broadpeakcalling/{combo}{filetype}.clipped.bdg"
     output:
-        bdg="results/{species}/broadpeakcalling/{combo}{filetype}.clipped.bdg.uscssort",
-        tmp=directory("results/tmp/{species}-{combo}-{filetype}/")
+        bdg="results/{species}/{endedness}_broadpeakcalling/{combo}{filetype}.clipped.bdg.uscssort",
+        tmp=directory("results/tmp/{endedness}-{species}-{combo}-{filetype}/")
     wildcard_constraints:
         filetype=".*"
     shell:
@@ -23,27 +21,27 @@ rule ucsc_sort:
 
 rule create_bw_track:
     input:
-        bedGraph="results/{species}/broadpeakcalling/{combo}{filetype}.clipped.bdg.uscssort",
+        bedGraph="results/{species}/{endedness}_broadpeakcalling/{combo}{filetype}.clipped.bdg.uscssort",
         chromsizes="results/{species}/data/chrom.sizes.txt"
     output:
-        "results/trackhub/{species}/{combo}{filetype}.bw"
+        "results/trackhub/{species}/{endedness}_{combo}{filetype}.bw"
     wrapper:
         "0.50.3/bio/ucsc/bedGraphToBigWig"
 
 rule trunctate_score:
     input:
-        "results/{species}/broadpeakcalling/{combo}_{filetype}.clipped.broadPeak"
+        "results/{species}{endedness}_/broadpeakcalling/{combo}_{filetype}.clipped.broadPeak"
     output:
-        temp("results/{species}/broadpeakcalling/{combo}_{filetype}.clipped.broadPeak.trunc")
+        temp("results/{species}/{endedness}_broadpeakcalling/{combo}_{filetype}.clipped.broadPeak.trunc")
     shell:
         """awk  '{{OFS="\t"}}{{$5=($5>1000?1000:$5);print}} {{input}} > {{output}}'"""
 
 rule create_peak_track:
     input:
-        peaks="results/{species}/broadpeakcalling/{combo}_peaks.clipped.broadPeak.trunc",
+        peaks="results/{species}/{endedness}_broadpeakcalling/{combo}_peaks.clipped.broadPeak.trunc",
         sizes="results/{species}/data/chrom.sizes.txt"
     output:
-        "results/trackhub/{species}/{combo}_peaks.bb"
+        "results/trackhub/{species}/{endedness}_{combo}_peaks.bb"
     conda:
         "../envs/ucsc.yaml"
     shell:
@@ -51,10 +49,10 @@ rule create_peak_track:
 
 rule create_domain_track:
     input:
-        domains="results/{species}/domains/{combo}.clipped.bed",
+        domains="results/{species}/{endedness}_domains/{combo}.clipped.bed",
         sizes="results/{species}/data/chrom.sizes.txt"
     output:
-        "results/trackhub/{species}/{combo}_domains.bb"
+        "results/trackhub/{species}/{endedness}_{combo}_domains.bb"
     conda:
         "../envs/ucsc.yaml"
     shell:

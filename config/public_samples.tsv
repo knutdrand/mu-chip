@@ -1,0 +1,14 @@
+sample	celltype	condition	sra	species	endedness
+SRR2297320	MII	H3K4me3	1	mm10	pe
+SRR2297321	MII	H3K4me3	1	mm10	pe
+SRR2297322	MII	H3K4me3	1	mm10	pe
+SRR2297323	MII	H3K4me3	1	mm10	pe
+SRR2297328	MII	input	1	mm10	pe
+SRR2297329	MII	input	1	mm10	pe
+SRR2297330	MII	input	1	mm10	pe
+SRR2297331	MII	input	1	mm10	pe
+SRR3337253	P12	H3K4me3	1	mm10	pe
+SRR3337254	P12	H3K4me3	1	mm10	pe
+SRR3337261	P12	input	1	mm10	pe
+SRR3337260	P12	input	1	mm10	pe
+SRR3337259	P12	input	1	mm10	pe

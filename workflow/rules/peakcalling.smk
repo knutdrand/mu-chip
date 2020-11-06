@@ -5,9 +5,9 @@ rule macs2:
         treatment="results/{species}/merged/{celltype}_{condition}.bed.gz",
         control="results/{species}/merged/{celltype}_input.bed.gz"
     output:
-        "results/{species}/broadpeakcalling/{celltype}_{condition}_peaks.broadPeak",
-        "results/{species}/broadpeakcalling/{celltype}_{condition}_treat_pileup.bdg",
-        "results/{species}/broadpeakcalling/{celltype}_{condition}_control_lambda.bdg"
+        "results/{species}/se_broadpeakcalling/{celltype}_{condition}_peaks.broadPeak",
+        "results/{species}/se_broadpeakcalling/{celltype}_{condition}_treat_pileup.bdg",
+        "results/{species}/se_broadpeakcalling/{celltype}_{condition}_control_lambda.bdg"
     conda:
         "../envs/oldmacs.yaml"
     params:
@@ -15,11 +15,22 @@ rule macs2:
     shell:
         "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition}"
 
+rule macs2_pe:
+    input:
+        treatment=lambda w: expand_pe_combo("results/{species}/size_filtered_dedup_pe/{pesample}.bam", w),
+        control= lambda w: expand_pe_input("results/{species}/size_filtered_dedup_pe/{pesample}.bam", w)
+    output:
+        "results/{species}/pe_broadpeakcalling/{celltype}_{condition}_peaks.broadPeak",
+        "results/{species}/pe_broadpeakcalling/{celltype}_{condition}_treat_pileup.bdg",
+        "results/{species}/pe_broadpeakcalling/{celltype}_{condition}_control_lambda.bdg"
+    script:
+        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} -f BAMPE"
+
 rule merge_domains:
     input:
-        "results/{species}/broadpeakcalling/{combo}_peaks.broadPeak"
+        "results/{species}/{endedness}_broadpeakcalling/{combo}_peaks.broadPeak"
     output:
-        "results/{species}/domains/{combo}.bed"
+        "results/{species}/{endedness}_domains/{combo}.bed"
     conda:
         "../envs/bedtools.yaml"
     shell:

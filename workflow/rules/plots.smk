@@ -5,38 +5,40 @@ wildcard_constraints:
 
 rule heatplot:
     input:
-        bedgraph="results/{species}/broadpeakcalling/{combo}_treat_pileup.bdg",
-        regions="results/{species}/domains/{combo}.clipped.bed"
+        bedgraph="results/{species}/{endedness}_broadpeakcalling/{combo}_treat_pileup.bdg",
+        regions="results/{species}/{endedness}_domains/{combo}.clipped.bed"
     output:
-        "results/plots/{species}/{combo}_heat.png",
-        "results/plots/{species}/{combo}_heat.pkl"
+        "results/plots/{species}/{endedness}_{combo}_heat.png",
+        "results/plots/{species}/{endedness}_{combo}_heat.pkl"
     shell:
         "bdgplot heat {input.bedgraph} {input.regions} -o {output[0]} -od {output[1]}"
 
 rule tssplot:
     input:
-        bedgraph="results/{species}/broadpeakcalling/{combo}_treat_pileup.bdg",
+        bedgraph="results/{species}/{endedness}_broadpeakcalling/{combo}_treat_pileup.bdg",
         regions="results/{species}/data/unique_tss.bed"
     output:
-        "results/plots/{species}/{combo}_tss.png",
-        "results/plots/{species}/{combo}_tss.pkl"
+        "results/plots/{species}/{endedness}_{combo}_tss.png",
+        "results/plots/{species}/{endedness}_{combo}_tss.pkl"
     shell:
         "bdgplot tss {input.bedgraph} {input.regions} -o {output[0]} -od {output[1]}"
 
 rule averageplot:
     input:
-        bedgraph="results/{species}/broadpeakcalling/{combo}_treat_pileup.bdg",
-        regions="results/{species}/domains/{combo}.clipped.bed"
+        bedgraph="results/{species}/{endedness}_broadpeakcalling/{combo}_treat_pileup.bdg",
+        regions="results/{species}/{endedness}_domains/{combo}.clipped.bed"
     output:
-        "results/plots/{species}/{combo}_average.png",
-        "results/plots/{species}/{combo}_average.pkl"
+        "results/plots/{species}/{endedness}_{combo}_average.png",
+        "results/plots/{species}/{endedness}_{combo}_average.pkl"
     shell:
         "bdgplot average {input.bedgraph} {input.regions} -o {output[0]} -od {output[1]}"
 
 rule joinplots:
     input:
-        lambda w: expand("results/plots/{{species}}/{combo}_{{plottype}}.pkl", combo=get_combos(w.comparisongroup))
+        lambda w: expand_comparison_group(
+            "results/plots/{species}/{endedness}_{celltype}_{condition}_{{plottype}}.pkl",
+            w.comparisongroup)
     output:
-        report("results/plots/{species}/joined/{comparisongroup}_{plottype}.png", category="BDGPlots")
+        report("results/plots/joined/{comparisongroup}_{plottype}.png", category="BDGPlots")
     shell:
         "bdgtools joinfigs {wildcards.plottype} {input} -o {output} --name {wildcards.comparisongroup}"
