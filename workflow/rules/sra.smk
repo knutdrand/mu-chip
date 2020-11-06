@@ -6,6 +6,8 @@ wildcard_constraints:
 rule prefetch:
     output:
         temp("results/sra_data/{sra}.sra")
+    conda:
+        "../envs/sra.yaml"
     shell:
         "prefetch {wildcards.sra} -o {output}"
 
@@ -15,6 +17,8 @@ rule fastq_dump_pe:
     output:
         "results/dumped_fastq/{pe_sra}_1.fastq.gz",
         "results/dumped_fastq/{pe_sra}_2.fastq.gz"
+    conda:
+        "../envs/sra.yaml"
     shell:
         "fastq-dump --split-files --gzip {input} -O results/dumped_fastq/"
 
@@ -23,6 +27,8 @@ rule fastq_dump_se:
         "results/sra_data/{se_sra}.sra"
     output:
         "results/dumped_fastq/{se_sra}.fastq.gz"
+    conda:
+        "../envs/sra.yaml"
     shell:
         "fastq-dump --gzip {input} -O results/dumped_fastq/"
 

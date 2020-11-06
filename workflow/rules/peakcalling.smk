@@ -23,7 +23,11 @@ rule macs2_pe:
         "results/{species}/pe_broadpeakcalling/{celltype}_{condition}_peaks.broadPeak",
         "results/{species}/pe_broadpeakcalling/{celltype}_{condition}_treat_pileup.bdg",
         "results/{species}/pe_broadpeakcalling/{celltype}_{condition}_control_lambda.bdg"
-    script:
+    conda:
+        "../envs/macs.yaml"
+    params:
+        gs=lambda w: genome_sizes[w.species]
+    shell:
         "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} -f BAMPE"
 
 rule merge_domains:
