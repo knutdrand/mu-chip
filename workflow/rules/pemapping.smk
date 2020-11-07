@@ -60,7 +60,7 @@ rule remove_small_fragments_bam:
     output:
         "results/{species}/size_filtered_dedup_pe/{pesample}.bam"        
     shell:
-        """samtools view -h {input} | awk 'length($10) > 50 || $1 ~ /^@/' | samtools view -bS - > {output}"""
+        """samtools view -h {input} | awk '($9>=0 ? $9 : -$9) > 50 || $1 ~ /^@/' | samtools view -bS - > {output}"""
 
 rule bamtobedpe:
     input:
