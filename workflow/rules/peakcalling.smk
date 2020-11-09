@@ -28,7 +28,7 @@ rule macs2_pe:
     params:
         gs=lambda w: genome_sizes[w.species]
     shell:
-        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} -f BAMPE"
+        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/pe_broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} -f BAMPE"
 
 rule merge_domains:
     input:
