@@ -35,7 +35,7 @@ def histone_track(name, color="200,0,0"):
     composite.add_view(signal_view)
     composite.add_view(regions_view)
 
-    for signal_type in ["qvalues", "treat_pileup", "control_lambda"]:
+    for signal_type in ["treat_pileup", "control_lambda"]:
         track = trackhub.Track(
             tracktype='bigWig',
             name=name+"_"+signal_type,
@@ -44,7 +44,8 @@ def histone_track(name, color="200,0,0"):
             autoScale="on"
         )
         signal_view.add_tracks(track)
-    for region_type in ["peaks", "domains"]:
+
+    for region_type in ["domains"]:
         track = trackhub.Track(
             name=name+"_"+region_type,
             url="%s_%s.bb" %(name, region_type),
@@ -53,7 +54,7 @@ def histone_track(name, color="200,0,0"):
         regions_view.add_tracks(track)
     return composite
 
-names = [PurePath(name).stem for name in snakemake.input]
+names = [PurePath(name).stem.replace("_domains.bb", "") for name in snakemake.input.domains]
 colors = [get_color(i, len(names)) for i in range(len(names))]
 hub, genomes_file, genome, trackdb = trackhub.default_hub(
     hub_name="testing",

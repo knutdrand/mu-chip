@@ -11,9 +11,10 @@ rule macs2:
     conda:
         "../envs/oldmacs.yaml"
     params:
-        gs=lambda w: genome_sizes[w.species]
+        gs=lambda w: genome_sizes[w.species],
+        log="logs/macs2/{species}/{celltype}_{condition}.log"
     shell:
-        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition}"
+        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} > {params.log}"
 
 rule macs2_pe:
     input:
@@ -26,9 +27,10 @@ rule macs2_pe:
     conda:
         "../envs/macs.yaml"
     params:
-        gs=lambda w: genome_sizes[w.species]
+        gs=lambda w: genome_sizes[w.species],
+        log="logs/macs2/{species}/{celltype}_{condition}.log"
     shell:
-        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/pe_broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} -f BAMPE"
+        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/pe_broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} -f BAMPE > {params.log}"
 
 rule merge_domains:
     input:

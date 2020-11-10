@@ -39,6 +39,6 @@ rule joinplots:
             "results/plots/{species}/{endedness}_{celltype}_{condition}_{{plottype}}.pkl",
             w.comparisongroup)
     output:
-        report("results/plots/joined/{comparisongroup}_{plottype}.png", category="BDGPlots", subcategory="{plottype}")
+        report("results/plots/joined/{comparisongroup}_{plottype}.png", category="BDGPlots")
     shell:
         "bdgtools joinfigs {wildcards.plottype} {input} -o {output} --name {wildcards.comparisongroup}"

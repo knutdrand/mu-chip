@@ -2,7 +2,8 @@ track_types = ["domains.bb", "treat_pileup.bw", "control_lambda.bw"]
 
 rule create_trackhub:
     input:
-        lambda w: [fstr % tt for tt in track_types for fstr in expand_species("results/trackhub/{{species}}/{endedness}_{celltype}_{condition}_%s", species=w.species)]
+        domains = lambda w: expand_species("results/trackhub/{{species}}/{endedness}_{celltype}_{condition}_domains.bb", species=w.species),
+        all_tracks = lambda w: [fstr % tt for tt in track_types for fstr in expand_species("results/trackhub/{{species}}/{endedness}_{celltype}_{condition}_%s", species=w.species)]
     output:
         "results/trackhub/{species}/trackDb.txt"
     script:
