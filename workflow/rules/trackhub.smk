@@ -6,10 +6,9 @@ rule create_genomes_file:
     output:
         "results/trackhub/genomes.txt"
     run:
-        text = "\n\n".join(
-            f"genome {species}\ntrackDb {species}/trackDb.txt" 
+        text = "\n".join(
+            f"genome {species}\ntrackDb {species}/trackDb.txt\n" 
             for species in set(samples["species"]))
-        print(text)
         open(output[0], "w").write(text)
 
 rule create_trackhub:
