@@ -54,7 +54,7 @@ def histone_track(name, color="200,0,0"):
         regions_view.add_tracks(track)
     return composite
 
-names = [PurePath(name).stem.replace("_domains.bb", "") for name in snakemake.input.domains]
+names = [PurePath(name).stem.replace("_domains", "") for name in snakemake.input.domains]
 colors = [get_color(i, len(names)) for i in range(len(names))]
 hub, genomes_file, genome, trackdb = trackhub.default_hub(
     hub_name="testing",

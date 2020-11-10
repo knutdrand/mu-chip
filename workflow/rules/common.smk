@@ -24,6 +24,7 @@ def get_combos(comparisongroup):
 
 def expand_species(format_string, species):
     mask = combo_frame["species"] == species
+    mask &= combo_frame["condition"].str.lower() != "input"
     res =  [format_string.format(endedness=row["endedness"], 
                                  celltype=row["celltype"],
                                  condition=row["condition"])
