@@ -16,8 +16,8 @@ rule create_trackhub:
     output:
         "results/trackhub/hub.txt"
     run:
-        name = config["name"]
-        mail = config["mail"]
+        name = config.get("name", "mu-chip")
+        mail = config.get("mail", "example@mail.com")
         open(output[0], "w").write(f"""hub {name}
 shortLabel {name}
 longLabel {name}

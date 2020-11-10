@@ -10,9 +10,7 @@ configfile: "config/config.yaml"
 defaults = {"species": "mm10", 
             "endedness": "se", 
             "sra": False, 
-            "comparisongroup": "all",
-            "name": "mu-chip",
-            "mail": "example@mail.com"}
+            "comparisongroup": "all"}
 
 validate(config, schema="../schemas/config.schema.yaml")
 chromosome_grep = "grep -Ew -e 'chr[0-9]{{1,2}}' -e chrX -e chrY"
