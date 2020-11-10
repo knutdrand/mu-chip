@@ -18,6 +18,6 @@ include: "rules/sra.smk"
 rule all:
     input:
         heatmaps=expand("results/plots/joined/all_{plottype}.png", plottype=("average", "heat", "tss")),
-        trackhub=expand("results/trackhub/{species}/trackDb.txt", species = set(samples["species"]))
+        trackhub=expand("results/trackhub/hub.txt")
 
 include: "rules/other.smk"

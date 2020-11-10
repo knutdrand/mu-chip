@@ -1,6 +1,32 @@
 track_types = ["domains.bb", "treat_pileup.bw", "control_lambda.bw"]
 
+rule create_genomes_file:
+    input:
+        expand("results/trackhub/{species}/trackDb.txt", species=set(samples["species"]))
+    output:
+        "results/trackhub/genomes.txt"
+    run:
+        open(output[0], "w").write("\n\n".join(
+            f"genome {species}\ntrackDb {species}/trackDb.txt" 
+            for species in set(samples["species"])))
+
 rule create_trackhub:
+    input:
+        "results/trackhub/genomes.txt"
+    output:
+        "results/trackhub/hub.txt"
+    run:
+        name = config["name"]
+        mail = config["mail"]
+        open(output[0], "w").write(f"""hub {name}
+shortLabel {name}
+longLabel {name}
+genomesFile genomes.txt
+email {mail}
+descriptionUrl ucscHub.html
+""")
+
+rule create_trackdb:
     input:
         domains = lambda w: expand_species("results/trackhub/{{species}}/{endedness}_{celltype}_{condition}_domains.bb", species=w.species),
         all_tracks = lambda w: [fstr % tt for tt in track_types for fstr in expand_species("results/trackhub/{{species}}/{endedness}_{celltype}_{condition}_%s", species=w.species)]
