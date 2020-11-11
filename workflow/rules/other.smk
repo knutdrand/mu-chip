@@ -40,3 +40,15 @@ rule get_unique_tss:
     shell:
         """awk '{{OFS="\t"}}{{if ($6=="+") {{print $1,$2,$2+1}} else {{print $1, $3-1, $3}}}}' {input} | uniq > {output}"""
 
+rule fastqc:
+    input:
+        "results/{folder}/{filename}.fastq.gz"
+    output:
+        html="results/qc/fastqc/{folder}/{filename}.html",
+        zip="results/qc/fastqc/{folder}/{filename}_fastqc.zip" # the suffix _fastqc.zip is necessary for multiqc to find the file. If not using multiqc, you are free to choose an arbitrary filename
+    params: ""
+    log:
+        "logs/fastqc/{folder}/{filename}.log"
+    threads: 1
+    wrapper:
+        "0.67.0/bio/fastqc"
