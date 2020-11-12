@@ -22,7 +22,7 @@ rule trimmomatic:
         "logs/trimmomatic/{sample}.log"
     params:
         # list of trimmers (see manual)
-        trimmer=["TRAILING:3"],
+        trimmer=["ILLUMINACLIP:TruSeq3-SE.fa:2:30:10", "SLIDINGWINDOW:4:20", "MINLEN:30"]
     threads:
         32
     wrapper:
@@ -42,6 +42,20 @@ rule bwa_mem:
     threads: 16
     wrapper:
         "0.49.0/bio/bwa/mem"
+
+rule bowtie2:
+    input:
+        sample="results/trimmed/{sample}.fastq.gz",
+        index=lambda w: config["index_path"].format(species=w.species) + ".1.bt2"
+    output:
+        "results/{species}/bowtie2_mapped/{sample}.bam"
+    log:
+        "logs/bowtie2/{species}/{sample}.log"
+    params:
+        index=lambda w: config["index_path"].format(species=w.species)
+    threads: 8  # Use at least two threads
+    wrapper:
+        "0.67.0/bio/bowtie2/align"
 
 rule filter:
     input:
