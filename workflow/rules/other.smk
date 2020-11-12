@@ -43,8 +43,10 @@ rule get_unique_tss:
 rule download_bowtie_index:
     output:
         temp(config["index_path"]+".zip")
+    log:
+        "logs/wget/{species}.log"
     shell:
-        "wget https://genome-idx.s3.amazonaws.com/bt/{wildcards.species}.zip"
+        "wget https://genome-idx.s3.amazonaws.com/bt/{wildcards.species}.zip -O {output} -o {log}"
 
 rule unzip_bowtie_index:
     input:
