@@ -1,27 +1,43 @@
-rule cutadapt:
+#rule cutadapt:
+#    input:
+#        "results/reads/{sample}_R1_001.fastq.gz"
+#    output:
+#        fastq="results/trimmed/{sample}.fastq.gz",
+#        qc="results/trimmed/{sample}.qc.txt"
+#    params:
+#        adapters='-a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -a AATGATACGGCGACCACCGAGATCTACAC',
+#        others='--nextseq-trim=20 -m 10'
+#    log:
+#        "logs/cutadapt/{sample}.log"
+#    threads: 16
+#    script:
+#        "0.66.0/bio/cutadapt/se"
+
+rule trimmomatic:
     input:
         "results/reads/{sample}_R1_001.fastq.gz"
     output:
-        fastq="results/trimmed/{sample}.fastq.gz",
-        qc="results/trimmed/{sample}.qc.txt"
-    params:
-        adapters='-a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -a AATGATACGGCGACCACCGAGATCTACAC',
-        others='--nextseq-trim=20 -m 10'
+        "results/trimmed/{sample}.fastq.gz",
     log:
-        "logs/cutadapt/{sample}.log"
-    threads: 16
-    script:
-        "0.66.0/bio/cutadapt/se"
+        "logs/trimmomatic/{sample}.log"
+    params:
+        # list of trimmers (see manual)
+        trimmer=["TRAILING:3"],
+    threads:
+        32
+    wrapper:
+        "0.67.0/bio/trimmomatic/se"
 
 rule bwa_mem:
     input:
-        reads="results/trimmed/{sample}.fastq.gz"
+        reads="results/trimmed/{sample}.fastq.gz",
+        index=lambda w: config["index_path"].format(species=w.species)
     output:
-        "results/{species}/mapped/{sample}.bam"
+        "results/{species}/bwa_mapped/{sample}.bam"
     log:
         "logs/bwa_mem/{species}/{sample}.log"
     params:
-        index=config["data_dir"]+"{species}/{species}.fa.gz",
+        index=lambda w, input: input.index,
         sort="samtools",
     threads: 16
     wrapper:
@@ -29,7 +45,7 @@ rule bwa_mem:
 
 rule filter:
     input:
-        "results/{species}/mapped/{sample}.bam"
+        "results/{species}/%s_mapped/{sample}.bam" % mapper
     output:
         "results/{species}/mapped_filtered/{sample}.bam"
     params:

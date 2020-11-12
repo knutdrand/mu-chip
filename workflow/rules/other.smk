@@ -40,6 +40,21 @@ rule get_unique_tss:
     shell:
         """awk '{{OFS="\t"}}{{if ($6=="+") {{print $1,$2,$2+1}} else {{print $1, $3-1, $3}}}}' {input} | uniq > {output}"""
 
+rule download_bowtie_index:
+    output:
+        temp(config["index_path"]+".zip")
+    shell:
+        "wget https://genome-idx.s3.amazonaws.com/bt/{wildcards.species}.zip"
+
+rule unzip_bowtie_index:
+    input:
+        "{path}/{species}.zip"
+    output:
+        "{path}/{species}.1.bt2"
+    shell:
+        "unzip {input} -d {wildcards.path}"
+
+
 rule fastqc:
     input:
         "results/{folder}/{filename}.fastq.gz"
