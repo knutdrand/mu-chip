@@ -52,7 +52,8 @@ rule bowtie2:
     log:
         "logs/bowtie2/{species}/{sample}.log"
     params:
-        index=lambda w: config["index_path"].format(species=w.species)
+        index=lambda w: config["index_path"].format(species=w.species),
+        extra=""
     threads: 8  # Use at least two threads
     wrapper:
         "0.67.0/bio/bowtie2/align"
