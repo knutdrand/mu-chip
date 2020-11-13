@@ -38,7 +38,7 @@ rule get_unique_tss:
     output:
         "results/{species}/data/unique_tss.bed"
     shell:
-        """awk '{{OFS="\t"}}{{if ($6=="+") {{print $1,$2,$2+1}} else {{print $1, $3-1, $3}}}}' {input} | uniq > {output}"""
+        """awk '{{OFS="\t"}}{{if ($6=="+") {{print $1,$2,$2+1,".",".","+"}} else {{print $1, $3-1, $3,".",".","-"}}}}' {input} | uniq > {output}"""
 
 rule download_bowtie_index:
     output:
