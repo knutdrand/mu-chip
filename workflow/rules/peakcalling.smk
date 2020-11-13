@@ -15,7 +15,7 @@ rule macs2:
     params:
         gs=lambda w: genome_sizes[w.species],
     shell:
-        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} > {log}"
+        "macs2 callpeak -t {input.treatment} -c {input.control} -g {params.gs} --bdg --broad --outdir results/{wildcards.species}/se_broadpeakcalling -n {wildcards.celltype}_{wildcards.condition} > {log}"
 
 rule macs2_pe:
     input:
