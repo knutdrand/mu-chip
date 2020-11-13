@@ -60,9 +60,9 @@ rule bowtie2:
 
 rule samtools_sort:
     input:
-        "results/{species}/bowtie2_unsorted_mapped/{pesample}.bam"
+        "results/{species}/bowtie2_unsorted_mapped/{sample}.bam"
     output:
-        "results/{species}/bowtie2_mapped/{pesample}.bam"
+        "results/{species}/bowtie2_mapped/{sample}.bam"
     threads:  # Samtools takes additional threads through its option -@
         8     # This value - 1 will be sent to -@.
     wrapper:
@@ -99,7 +99,7 @@ rule bamtobed:
     conda:
         "../envs/bamtobed.yaml"
     shell:
-        "samtools view -b -f 64 {input} | bedtools bamtobed -i - | gzip > {output}"
+        "bedtools bamtobed -i {input} | gzip > {output}"
 
 rule merge_reads:
     input:
@@ -109,4 +109,4 @@ rule merge_reads:
     conda:
         "../envs/bedtools.yaml"
     shell:
-        "zcat {input} | gzip | bedsort > {output}"
+        "zcat {input} | bedtools sort | gzip > {output}"
