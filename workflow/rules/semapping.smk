@@ -45,7 +45,7 @@ rule bwa_mem:
 
 rule bowtie2:
     input:
-        sample="results/trimmed/{sample}.fastq.gz",
+        sample=["results/trimmed/{sample}.fastq.gz"],
         index=lambda w: config["index_path"].format(species=w.species) + ".1.bt2"
     output:
         "results/{species}/bowtie2_unsorted_mapped/{sample}.bam"
