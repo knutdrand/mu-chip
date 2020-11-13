@@ -37,6 +37,7 @@ def expand_species(format_string, species):
 
 def expand_comparison_group(format_string, comparisongroup):
     mask = combo_frame["comparisongroup"]==comparisongroup
+    mask &= combo_frame["condition"].str.lower() != "input"
     return [format_string.format(species=row["species"],
                                  endedness=row["endedness"],
                                  celltype=row["celltype"],
