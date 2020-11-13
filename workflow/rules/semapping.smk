@@ -48,7 +48,7 @@ rule bowtie2:
         sample="results/trimmed/{sample}.fastq.gz",
         index=lambda w: config["index_path"].format(species=w.species) + ".1.bt2"
     output:
-        "results/{species}/bowtie2_mapped/{sample}.bam"
+        "results/{species}/bowtie2_unsorted_mapped/{sample}.bam"
     log:
         "logs/bowtie2/{species}/{sample}.log"
     params:
@@ -56,6 +56,16 @@ rule bowtie2:
     threads: 8  # Use at least two threads
     wrapper:
         "0.67.0/bio/bowtie2/align"
+
+rule samtools_sort:
+    input:
+        "results/{species}/bowtie2_unsorted_mapped/{pesample}.bam"
+    output:
+        "results/{species}/bowtie2_mapped/{pesample}.bam"
+    threads:  # Samtools takes additional threads through its option -@
+        8     # This value - 1 will be sent to -@.
+    wrapper:
+        "0.67.0/bio/samtools/sort"
 
 rule filter:
     input:

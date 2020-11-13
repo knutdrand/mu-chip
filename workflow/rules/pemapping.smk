@@ -66,7 +66,7 @@ rule bowtie2_pe:
     wrapper:
         "0.67.0/bio/bowtie2/align"
 
-rule samtools_sort:
+rule samtools_sort_pe:
     input:
         "results/{species}/bowtie2_unsorted_mapped_pe/{pesample}.bam"
     output:
