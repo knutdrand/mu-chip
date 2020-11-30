@@ -20,7 +20,6 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 for key, value in defaults.items():
     if key not in samples:
         samples[key] = config.get(key, value)
-
 combos = {f"{celltype}_{condition}" for celltype, condition in zip(samples["celltype"], samples["condition"])}
 combo_frame = samples.groupby(by=["species", "celltype", "condition"], as_index=False).last()
 def get_combos(comparisongroup):
