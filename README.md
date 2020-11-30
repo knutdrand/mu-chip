@@ -5,7 +5,7 @@
 
 Snakemake workflow to analyze muChip experiments. Creates a trackhub with called peaks and domains as well as fragment pileup and control track for each sample. Also creates average-, tss- and heatplots for each sample.
 
-.. image:: rulegraph.svg
+![](rulegraph.svg)
 
 ## Authors
 
