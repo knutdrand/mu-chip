@@ -21,9 +21,12 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ### Step 2: Configure workflow
 
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.tsv` to specify your sample setup.
+Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.tsv` to specify your sample setup. See `config/samples.tsv` for local file example and `config/public_samples.tsv` for example using SRA.
 
-### Step 3: Install Snakemake
+### Step 3: Get the read files
+Move any local read files to the `results/reads` folder. The file names should end with `_R1_001.fastq.gz` (`R2` for mate pair files). 
+
+### Step 4: Install Snakemake
 
 Install Snakemake using [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):
 
@@ -31,7 +34,7 @@ Install Snakemake using [conda](https://conda.io/projects/conda/en/latest/user-g
 
 For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
-### Step 4: Execute workflow
+### Step 5: Execute workflow
 
 Activate the conda environment:
 
@@ -40,6 +43,8 @@ Activate the conda environment:
 Test your configuration by performing a dry-run via
 
     snakemake --use-conda -n
+
+WARNING: The workflow will download index file to the path specified in config, if it is missing. Make sure with the dry-run that index file is not downloaded to a wrong place. 
 
 Execute the workflow locally via
 
@@ -60,7 +65,7 @@ If you not only want to fix the software stack but also the underlying OS, use
 in combination with any of the modes above.
 See the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executable.html) for further details.
 
-### Step 5: Investigate results
+### Step 6: Investigate results
 
 After successful execution, you can create a self-contained interactive HTML report with all results via:
 
@@ -69,14 +74,18 @@ After successful execution, you can create a self-contained interactive HTML rep
 This report can, e.g., be forwarded to your collaborators.
 An example (using some trivial test data) can be seen [here](https://cdn.rawgit.com/snakemake-workflows/rna-seq-kallisto-sleuth/master/.test/report.html).
 
-### Step 6: Commit changes
+A trackhub folder is created in `results/trackhub/` which can be used to view the tracks on `https://genome-euro.ucsc.edu/cgi-bin/hgHubConnect`
+
+Figures are places in `results/plots/joined/`
+
+### Step 7: Commit changes
 
 Whenever you change something, don't forget to commit the changes back to your github copy of the repository:
 
     git commit -a
     git push
 
-### Step 7: Obtain updates from upstream
+### Step 8: Obtain updates from upstream
 
 Whenever you want to synchronize your workflow copy with new developments from upstream, do the following.
 

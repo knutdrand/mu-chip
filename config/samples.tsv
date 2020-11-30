@@ -1,5 +1,5 @@
-sample	celltype	condition	replicate	run
-testing_1	MII	H3K4me3	1	1
-testing_2	MII	INPUT	1	1
-testing_3	MII	H3K4me3	2	1
-testing_4	MII	INPUT	2	1
+sample	celltype	condition	endedness
+testing_1	MII	H3K4me3	pe
+testing_2	MII	INPUT	pe
+testing_3	Day2	H3K4me3	se
+testing_4	Day2	INPUT	se

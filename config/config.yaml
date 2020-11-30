@@ -2,6 +2,5 @@
 # In case of sample based data, it should be complemented by a samples.tsv file that contains
 # one row per sample. It can be parsed easily via pandas.
 samples: "config/samples.tsv"
-endedness: "pe"
-index_path: "/home/knut/Data/{species}/{species}"
-mapper: "bowtie2"
+index_path: "/home/Data/{species}/{species}" #Path to where index is/should be. species is name of reference genome e.g mm10 or hg38
+mapper: "bowtie2" #bowtie2 or bwa

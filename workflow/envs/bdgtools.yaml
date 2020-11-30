@@ -1,0 +1,4 @@
+channels:
+dependencies:
+   - pip:
+     - "--editable=git+https://github.com/knutdrand/bdgtools"
