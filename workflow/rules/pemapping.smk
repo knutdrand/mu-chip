@@ -42,7 +42,7 @@ rule bwa_mem_pe:
     log:
         "logs/bwa_mem/{species}/{pesample}.log"
     params:
-        index=lambda w: config["index_path"].format(species=w.speices),
+        index=lambda w: config["index_path"].format(species=w.species),
         sort="samtools",
         sort_order="coordinate"
     threads:
@@ -60,7 +60,7 @@ rule bowtie2_pe:
     log:
         "logs/bowtie2/{species}/{pesample}.log"
     params:
-        index=lambda w: config["index_path"].format(species=w.speices),
+        index=lambda w: config["index_path"].format(species=w.species),
         extra="-X 2000"  # optional parameters
     threads: 8  # Use at least two threads
     wrapper:
