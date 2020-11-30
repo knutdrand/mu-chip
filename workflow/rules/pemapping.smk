@@ -17,8 +17,8 @@
 
 rule trimmomatic_pe:
     input:
-        "results/reads/{pesample}_R1_001.fastq.gz",
-        "results/reads/{pesample}_R2_001.fastq.gz",
+        r1="results/reads/{pesample}_R1_001.fastq.gz",
+        r2="results/reads/{pesample}_R2_001.fastq.gz"
     output:
         r1=temp("results/trimmed/{pesample}_R1.fastq.gz"),
         r2=temp("results/trimmed/{pesample}_R2.fastq.gz"),
