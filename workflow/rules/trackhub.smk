@@ -41,11 +41,12 @@ rule ucsc_sort:
         "results/{species}/{endedness}_broadpeakcalling/{combo}{filetype}.clipped.bdg"
     output:
         bdg="results/{species}/{endedness}_broadpeakcalling/{combo}{filetype}.clipped.bdg.uscssort",
-        tmp=directory("results/tmp/{endedness}-{species}-{combo}-{filetype}/")
+    params:
+        tmp="results/tmp/ucsc_sort_{endedness}-{species}-{combo}-{filetype}"
     wildcard_constraints:
-        filetype=".*"
+        filetype=".*",
     shell:
-        "LC_COLLATE=C sort -k1,1 -k2,2n {input} -T {output.tmp} > {output.bdg}"
+        "LC_COLLATE=C sort -k1,1 -k2,2n {input} -T {params.tmp} > {output.bdg}"
 
 rule create_bw_track:
     input:
