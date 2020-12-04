@@ -10,6 +10,8 @@ rule heatplot:
     output:
         "results/plots/{species}/{endedness}_{combo}_heat.png",
         "results/plots/{species}/{endedness}_{combo}_heat.pkl"
+    conda:
+        "../envs/bdgtools.yaml"
     shell:
         "bdgplot heat {input.bedgraph} {input.regions} -o {output[0]} -od {output[1]}"
 
@@ -20,6 +22,8 @@ rule tssplot:
     output:
         "results/plots/{species}/{endedness}_{combo}_tss.png",
         "results/plots/{species}/{endedness}_{combo}_tss.pkl"
+    conda:
+        "../envs/bdgtools.yaml"
     shell:
         "bdgplot tss {input.bedgraph} {input.regions} -o {output[0]} -od {output[1]}"
 
@@ -30,6 +34,8 @@ rule averageplot:
     output:
         "results/plots/{species}/{endedness}_{combo}_average.png",
         "results/plots/{species}/{endedness}_{combo}_average.pkl"
+    conda:
+        "../envs/bdgtools.yaml"
     shell:
         "bdgplot average {input.bedgraph} {input.regions} -o {output[0]} -od {output[1]}"
 
@@ -40,5 +46,7 @@ rule joinplots:
             w.comparisongroup)
     output:
         report("results/plots/joined/{comparisongroup}_{plottype}.png", category="BDGPlots")
+    conda:
+        "../envs/bdgtools.yaml"
     shell:
         "bdgtools joinfigs {wildcards.plottype} {input} -o {output} --name {wildcards.comparisongroup}"
