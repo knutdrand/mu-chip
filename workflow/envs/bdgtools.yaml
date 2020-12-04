@@ -1,4 +1,4 @@
 channels:
 dependencies:
    - pip:
-     - "--editable=git+https://github.com/knutdrand/bdgtools"
+     - "--editable=git+https://github.com/knutdrand/bdgtools@master#egg=bdgtools"
