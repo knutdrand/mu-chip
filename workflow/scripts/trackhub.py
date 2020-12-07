@@ -1,12 +1,12 @@
-import trackhub
 from pathlib import PurePath
-import numpy as np
 import colorsys
+
+import trackhub
 
 def get_color(i, n_colors):
     h =  i/float(n_colors)
     s = 0.5 # color_intensity[filetype]
-    color = np.array(colorsys.hsv_to_rgb(h, 0.5, 0.5))*255
+    color = [255*v for v in colorsys.hsv_to_rgb(h, 0.5, 0.5)]
     return ",".join([str(int(c)) for c in list(color)])
 
 def histone_track(name, color="200,0,0"):
