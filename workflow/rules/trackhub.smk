@@ -33,6 +33,8 @@ rule create_trackdb:
         all_tracks = lambda w: [fstr % tt for tt in track_types for fstr in expand_species("results/trackhub/{{species}}/{endedness}_{celltype}_{condition}_%s", species=w.species)]
     output:
         "results/trackhub/{species}/trackDb.txt"
+    conda:
+        "../envs/trackhub.yaml"
     script:
         "../scripts/trackhub.py"
 
